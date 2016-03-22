@@ -5,6 +5,9 @@
  */
 package ws;
 
+import com.google.gson.Gson;
+import dao.UsuarioDAO;
+import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.PathParam;
@@ -13,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import modelo.Usuario;
 
 /**
  * REST Web Service
@@ -37,9 +41,32 @@ public class WaypointsSW {
      */
     @GET
     @Produces("application/json")
-    public String getJson() {
-        //TODO return proper representation object
-        throw new UnsupportedOperationException();
+    @Path("Usuario/login/{login}/{senha}")
+    public String getUsuario (@PathParam("login") String usuario, @PathParam("senha") String senha){
+
+        Usuario us = new Usuario();
+        us.setUsuario(usuario);
+        UsuarioDAO usDAO = new UsuarioDAO();
+        us = usDAO.buscar(us);
+        
+        if (us.getSenha().equals(senha)) {
+            return "{\"Login\": \"True\"}";
+        }else{
+            return "{\"Login\": \"False\"}";
+        }
+    }
+    
+    @GET
+    @Produces("application/json")
+    @Path("Usuario/list")
+    public String listUsuario (){
+        List<Usuario> lista;
+        
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        lista = usuarioDAO.listar();
+        Gson gson = new Gson();
+        gson.toString();
+        return gson.toJson(lista);
     }
 
     /**
