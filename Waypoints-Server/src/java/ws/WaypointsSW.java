@@ -14,6 +14,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import static javax.ws.rs.HttpMethod.POST;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import modelo.Usuario;
@@ -37,31 +39,32 @@ public class WaypointsSW {
 
     /**
      * Retrieves representation of an instance of ws.WaypointsSW
+     *
      * @return an instance of java.lang.String
      */
     @GET
     @Produces("application/json")
     @Path("Usuario/login/{login}/{senha}")
-    public String getUsuario (@PathParam("login") String usuario, @PathParam("senha") String senha){
+    public String getUsuario(@PathParam("login") String usuario, @PathParam("senha") String senha) {
 
         Usuario us = new Usuario();
         us.setUsuario(usuario);
         UsuarioDAO usDAO = new UsuarioDAO();
         us = usDAO.buscar(us);
-        
+
         if (us.getSenha().equals(senha)) {
             return "{\"Login\": \"True\"}";
-        }else{
+        } else {
             return "{\"Login\": \"False\"}";
         }
     }
-    
+
     @GET
     @Produces("application/json")
     @Path("Usuario/list")
-    public String listUsuario (){
+    public String listUsuario() {
         List<Usuario> lista;
-        
+
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         lista = usuarioDAO.listar();
         Gson gson = new Gson();
@@ -71,11 +74,23 @@ public class WaypointsSW {
 
     /**
      * PUT method for updating or creating an instance of WaypointsSW
+     *
      * @param content representation for the resource
      * @return an HTTP response with content of the updated or created resource.
      */
     @PUT
     @Consumes("application/json")
     public void putJson(String content) {
+    }
+
+    @POST
+    @Consumes("text/xml")
+    @Path("Usuario/novo/{login}/{senha}")
+    public String adicionaBanda(String user) {
+        Usuario usuario = new Usuario();
+        usuario.setUsuario(user);
+        UsuarioDAO dao = new UsuarioDAO();
+        dao.inserir(usuario);
+        return usuario.getUsuario() + " adicionado.";
     }
 }
