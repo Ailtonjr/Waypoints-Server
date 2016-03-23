@@ -84,7 +84,7 @@ public class WaypointsSW {
     }
 
     @POST
-    @Consumes("text/xml")
+    //@Consumes("text/xml")
     @Path("Usuario/novo/{login}/{senha}")
     public String adicionaBanda(String user) {
         Usuario usuario = new Usuario();
